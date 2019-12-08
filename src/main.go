@@ -37,6 +37,8 @@ func main() {
 
 	var err error
 
+	ImportSettings()
+
 	if help {
 		flag.PrintDefaults()
 	} else if !cli {
@@ -73,14 +75,8 @@ func main() {
 			}
 
 		} else {
-			//fmt.Println("A flag is required")
-			//flag.PrintDefaults()
-
-			s := "password"
-			enc, _ := Encrypt(CreateHash("string"), []byte(s))
-			fmt.Println("Encrypted: ", string(enc))
-			dec, _ := Decrypt(CreateHash("string"), []byte(enc))
-			fmt.Println("Decrypted: ", string(dec))
+			fmt.Println("A flag is required")
+			flag.PrintDefaults()
 		}
 
 	}

@@ -3,8 +3,8 @@ package main
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/md5"
 	"crypto/rand"
-	//"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"io"
@@ -25,11 +25,10 @@ func GenerateKey() string {
 	return string(b)
 }
 
-func CreateHash(key string) []byte {
-	//hasher := md5.New()
-	//hasher.Write([]byte(key))
-	//return hex.EncodeToString(hasher.Sum(nil))
-	return []byte("qwertyuiopasdfghjklzxcvbnm123456")
+func CreateHash(key string) string {
+	hasher := md5.New()
+	hasher.Write([]byte(key))
+	return hex.EncodeToString(hasher.Sum(nil))
 }
 
 func Encrypt(key, pass []byte) ([]byte, error) {
