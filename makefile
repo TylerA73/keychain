@@ -4,11 +4,13 @@ GOBUILD=$(GOCMD) build
 GOGET=$(GOCMD) get
 GOCLEAN=$(GOCMD) clean
 SRC=src/*
+SETTINGS=settings
 BIN=keychain
 
 all: build
 build:
 		$(GOBUILD) -o $(BIN) $(SRC)
+		mkdir $(SETTINGS)
 clean: 
 		$(GOCLEAN)
 		rm -f $(BIN)
