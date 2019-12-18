@@ -8,22 +8,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
-	r "math/rand"
-	"time"
 )
-
-/**
- * Generate Key
- */
-func GenerateKey() string {
-	r.Seed(time.Now().UnixNano())
-	var chars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()")
-	b := make([]rune, 6)
-	for i := range b {
-		b[i] = chars[r.Intn(len(chars))]
-	}
-	return string(b)
-}
 
 func CreateHash(key string) string {
 	hasher := md5.New()

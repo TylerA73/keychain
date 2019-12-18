@@ -25,7 +25,7 @@ func init() {
  * Add
  */
 func Add(key string, pass string) error {
-	encrypted, err := Encrypt([]byte(CreateHash("string")), []byte(pass))
+	encrypted, err := Encrypt([]byte(config.Key), []byte(pass))
 	if err != nil {
 		return err
 	}
@@ -62,11 +62,11 @@ func List() ([]Entry, error) {
 	for i := range list {
 		val, err := Get(list[i])
 		if err != nil {
-
+			return nil, err
 		} else {
 			entries = append(entries, Entry{
 				Key:   list[i],
-				Value: val,
+				Value: string(val),
 			})
 		}
 	}
@@ -75,14 +75,14 @@ func List() ([]Entry, error) {
 
 }
 
-func Get(key string) (string, error) {
+func Get(key string) ([]byte, error) {
 	val, err := client.Get(key).Result()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	decrypted, err := Decrypt([]byte(CreateHash("string")), []byte(val))
+	decrypted, err := Decrypt([]byte(config.Key), []byte(val))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return string(decrypted), nil
+	return decrypted, nil
 }

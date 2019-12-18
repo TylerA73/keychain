@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	r "math/rand"
+	"time"
 )
 
 var config Settings
@@ -17,22 +19,37 @@ func init() {
 	ImportSettings()
 }
 
+/**
+ * Generate Key
+ */
+func GenerateKey(length int) string {
+	r.Seed(time.Now().UnixNano())
+	var chars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()")
+	b := make([]rune, length)
+	for i := range b {
+		b[i] = chars[r.Intn(len(chars))]
+	}
+	return string(b)
+}
+
 func CreateFile() Settings {
+	fmt.Println("File being created...")
 	data := Settings{
-		Key: CreateHash("testingthisout"),
+		Key: CreateHash(GenerateKey(32)),
 	}
 	file, _ := json.MarshalIndent(data, "", " ")
-	_ = ioutil.WriteFile("../settings/config.json", file, 0644)
+	err := ioutil.WriteFile("./settings/config.json", file, 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return data
 }
 
 func ImportSettings() {
-	file, err := ioutil.ReadFile("../settings/config.json")
+	file, err := ioutil.ReadFile("./settings/config.json")
 	if err != nil {
 		config = CreateFile()
 	} else {
 		_ = json.Unmarshal([]byte(file), &config)
 	}
-
-	fmt.Println("Key: ", config.Key)
 }

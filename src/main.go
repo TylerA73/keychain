@@ -29,11 +29,6 @@ func init() {
  * Main Function
  */
 func main() {
-	/*s := "key"
-	h := sha1.New()
-	h.Write([]byte(s))
-	sha1_hash := base64.URLEncoding.EncodeToString(h.Sum(nil))
-	fmt.Println(s, sha1_hash, GenerateKey())*/
 
 	var err error
 
@@ -47,7 +42,7 @@ func main() {
 		fmt.Println("CLI MODE")
 
 		if add != "" {
-			err = Add(GenerateKey(), add)
+			err = Add(GenerateKey(6), add)
 			if err != nil {
 				fmt.Println(err)
 			} else {
