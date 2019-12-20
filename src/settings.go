@@ -35,7 +35,8 @@ func GenerateKey(length int) string {
 func CreateFile() Settings {
 	fmt.Println("File being created...")
 	data := Settings{
-		Key: CreateHash(GenerateKey(32)),
+		Key:  GenerateKey(20),
+		Hash: CreateHash(GenerateKey(32)),
 	}
 	file, _ := json.MarshalIndent(data, "", " ")
 	err := ioutil.WriteFile("./settings/config.json", file, 0644)

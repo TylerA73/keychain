@@ -8,7 +8,7 @@ import (
 var client *redis.Client // Redis Client
 
 type Entry struct {
-	Key   string
+	Index int
 	Value string
 }
 
@@ -25,11 +25,11 @@ func init() {
  * Add
  */
 func Add(key string, pass string) error {
-	encrypted, err := Encrypt([]byte(config.Key), []byte(pass))
+	encrypted, err := Encrypt([]byte(config.Hash), []byte(pass))
 	if err != nil {
 		return err
 	}
-	err = client.Set(key, encrypted, 0).Err()
+	err = client.LPush(config.Key, encrypted).Err()
 	if err != nil {
 		return err
 	}
@@ -54,18 +54,21 @@ func Delete(key string) error {
  */
 func List() ([]Entry, error) {
 	entries := []Entry{}
-	list, err := client.Keys("*").Result()
+	list, err := client.LRange(config.Key, 0, -1).Result()
 	if err != nil {
 		return nil, err
 	}
 
 	for i := range list {
-		val, err := Get(list[i])
+		val, err := Decrypt([]byte(config.Hash), []byte(list[i]))
 		if err != nil {
-			return nil, err
+			entries = append(entries, Entry{
+				Index: i,
+				Value: "Could not be decrypted",
+			})
 		} else {
 			entries = append(entries, Entry{
-				Key:   list[i],
+				Index: i,
 				Value: string(val),
 			})
 		}
@@ -73,16 +76,4 @@ func List() ([]Entry, error) {
 
 	return entries, nil
 
-}
-
-func Get(key string) ([]byte, error) {
-	val, err := client.Get(key).Result()
-	if err != nil {
-		return nil, err
-	}
-	decrypted, err := Decrypt([]byte(config.Key), []byte(val))
-	if err != nil {
-		return nil, err
-	}
-	return decrypted, nil
 }

@@ -10,7 +10,7 @@ BIN=keychain
 all: build
 build:
 		$(GOBUILD) -o $(BIN) $(SRC)
-		mkdir $(SETTINGS)
+		mkdir -p $(SETTINGS)
 clean: 
 		$(GOCLEAN)
 		rm -f $(BIN)

@@ -64,7 +64,7 @@ func main() {
 					fmt.Println("You have no keys stored")
 				} else {
 					for i := range entries {
-						fmt.Printf("Key: %s, Value: %s\n", entries[i].Key, entries[i].Value)
+						fmt.Printf("%d: %s\n", entries[i].Index, entries[i].Value)
 					}
 				}
 			}
