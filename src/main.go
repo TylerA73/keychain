@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"fyne.io/fyne/app"
+	"fyne.io/fyne/widget"
 )
 
 /** GLOBAL VARIABLES **/
@@ -37,10 +39,18 @@ func main() {
 	if help {
 		flag.PrintDefaults()
 	} else if !cli {
-		fmt.Println("GUI MODE")
-	} else {
-		fmt.Println("CLI MODE")
+		app := app.New()
 
+		w := app.NewWindow("Keychain")
+		w.SetContent(widget.NewVBox(
+			widget.NewLabel("Keychain"),
+			widget.NewButton("Quit", func() {
+				app.Quit()
+			}),
+		))
+
+		w.ShowAndRun()
+	} else {
 		if add != "" {
 			err = Add(GenerateKey(6), add)
 			if err != nil {

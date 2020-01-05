@@ -17,3 +17,4 @@ clean:
 
 deps:
 		$(GOGET) github.com/go-redis/redis
+		$(GOGET) fyne.io/fyne
